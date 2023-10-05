@@ -3,7 +3,7 @@
 const { handleDelivery, createPickup } = require('./handler');
 const socket = require('../socket');
 
-const storeName = '1-206-flower';
+const storeName = '1-800-flowers'; 
 
 // Join a room with the storeName as the Vendor ID
 socket.emit('join', storeName);
@@ -12,9 +12,20 @@ socket.emit('join', storeName);
 const orderInterval = setInterval(() => {
   const pickupOrder = createPickup(storeName);
   socket.emit('pickup', pickupOrder);
-}, 5000); // Simulate orders every 5 seconds 
+}, 5000); 
 
+// Subscribe to the delivered Queue
+socket.emit('getAll', { clientId: storeName, event: 'delivered' });
 
 socket.on('delivered', (payload) => {
+ 
   handleDelivery(payload);
+
+  // Trigger the 'received' event with the correct payload to acknowledge receipt
+  const receivedPayload = {
+    event: 'received',
+    messageId: payload.orderId,
+    clientId: storeName,
+  };
+  socket.emit('received', receivedPayload);
 });
