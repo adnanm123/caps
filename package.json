@@ -4,8 +4,11 @@
   "description": "",
   "main": "eventPool.js",
   "scripts": {
+    "test": "jest --verbose --coverage",
+    "start": "node server/index.js",
     "start-driver-server": "node clients/driver/index.js",
-    "test": "jest --coverage --verbose"
+    "start-vendor-1-server": "node clients/flower-vendor/index.js",
+    "start-vendor-2-server": "node clients/widget-vendor/index.js"
   },
   "keywords": [],
   "author": "",
